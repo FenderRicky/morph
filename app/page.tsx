@@ -1,11 +1,5 @@
-import { registry } from "@/morph/registry";
+import Morph from "@/components/Morph";
 
 export default function Home() {
-  return (
-    <main>
-      {Object.entries(registry).map(([name, Block]) => (
-        <Block key={name} />
-      ))}
-    </main>
-  );
+  return <Morph />;
 }
