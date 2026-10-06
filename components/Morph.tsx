@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { registry } from "@/morph/registry";
 import { presets, classify, type LayoutSpec, type Persona } from "@/morph/spec";
+import Tracker from "@/components/Tracker";
 
 type Source = "default" | "instant rules" | "AI" | "manual" | "original";
 
@@ -90,6 +91,7 @@ export default function Morph() {
         ))}
       </div>
 
+      <Tracker spec={spec} source={source} />
       <main>
         <AnimatePresence mode="popLayout">
           {spec.blocks.map((name) => {
