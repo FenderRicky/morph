@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       layout: blocks.join(">"),
       persona: (PERSONAS as readonly string[]).includes(raw.persona) ? raw.persona : "unknown",
       source: SOURCES.includes(raw.source) ? raw.source : "other",
-      reasoning: String(raw.reasoning || "").slice(0, 160),
+      reasoning: String(raw.reasoning || "").slice(0, 240),
     };
     await fs.mkdir(path.dirname(FILE), { recursive: true });
     await fs.appendFile(FILE, JSON.stringify(ev) + "\n");

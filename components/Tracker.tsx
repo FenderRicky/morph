@@ -15,6 +15,7 @@ function send(body: object) {
 
 export default function Tracker({ spec, source }: { spec: LayoutSpec; source: string }) {
   const sid = useRef("");
+  const converted = useRef(false);
   const layout = spec.blocks.join(">");
   const last = useRef({ layout, persona: spec.persona, source, reasoning: spec.reasoning });
 
@@ -32,7 +33,10 @@ export default function Tracker({ spec, source }: { spec: LayoutSpec; source: st
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest("a[data-cta]");
-      if (a) send({ type: "convert", sid: sid.current, ...last.current });
+      if (a && !converted.current) {
+        converted.current = true;
+        send({ type: "convert", sid: sid.current, ...last.current });
+      }
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);

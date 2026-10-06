@@ -12,7 +12,7 @@ export default async function Dashboard() {
     events = txt.trim().split("\n").filter(Boolean).map((l) => JSON.parse(l));
   } catch {}
 
-  const real = events.filter((e) => e.source !== "manual" && e.source !== "original");
+  const real = events.filter((e) => e.source === "AI");
   const rows = new Map<string, { views: number; conv: number; persona: string }>();
   for (const e of real) {
     const r = rows.get(e.layout) || { views: 0, conv: 0, persona: e.persona };
@@ -29,7 +29,7 @@ export default async function Dashboard() {
     <main className="mx-auto max-w-5xl px-6 py-16">
       <p className="text-sm tracking-widest text-[var(--accent)]">MORPH DASHBOARD</p>
       <h1 className="mt-2 text-4xl font-bold">What the engine decided, and what worked</h1>
-      <p className="mt-2 text-sm text-[var(--muted)]">Manual persona clicks and &quot;show original&quot; are excluded from the stats.</p>
+      <p className="mt-2 text-sm text-[var(--muted)]">Only AI-chosen layouts count, and each visit counts one click at most.</p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {[
