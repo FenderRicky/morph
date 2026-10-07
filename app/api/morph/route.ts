@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { loadEvents } from "@/lib/store";
 import { layoutSpec, presets, PERSONAS, type LayoutSpec, type Persona } from "@/morph/spec";
 
 const SYSTEM = `You are the layout brain for a portfolio website that adapts to each visitor.
@@ -21,23 +20,6 @@ const EXPLORE = 0.2;
 type Stat = { views: number; conv: number };
 
 // Only count layouts that were served by the brain (source "AI"), so instant-rule flashes don't skew results
-async function loadStats() {
-  const m = new Map<string, Stat>();
-  try {
-    const txt = await fs.readFile(path.join(process.cwd(), "data", "events.jsonl"), "utf8");
-    for (const line of txt.trim().split("\n")) {
-      try {
-        const e = JSON.parse(line);
-        if (e.source !== "AI") continue;
-        const r = m.get(e.layout) || { views: 0, conv: 0 };
-        if (e.type === "view") r.views++;
-        else if (e.type === "convert") r.conv++;
-        m.set(e.layout, r);
-      } catch {}
-    }
-  } catch {}
-  return m;
-}
 
 async function askAI(clean: object): Promise<LayoutSpec> {
   const key = process.env.LLM_API_KEY;
@@ -115,4 +97,16 @@ export async function POST(req: Request) {
     console.error("morph brain:", e);
     return NextResponse.json({ spec: null, error: String(e) });
   }
+}
+
+async function loadStats() {
+  const m = new Map<string, Stat>();
+  for (const e of await loadEvents()) {
+    if (e.source !== "AI") continue;
+    const r = m.get(e.layout) || { views: 0, conv: 0 };
+    if (e.type === "view") r.views++;
+    else if (e.type === "convert") r.conv++;
+    m.set(e.layout, r);
+  }
+  return m;
 }

@@ -1,16 +1,9 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { loadEvents } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
-type Ev = { t: string; type: "view" | "convert"; sid: string; layout: string; persona: string; source: string; reasoning: string };
-
 export default async function Dashboard() {
-  let events: Ev[] = [];
-  try {
-    const txt = await fs.readFile(path.join(process.cwd(), "data", "events.jsonl"), "utf8");
-    events = txt.trim().split("\n").filter(Boolean).map((l) => JSON.parse(l));
-  } catch {}
+  const events = await loadEvents();
 
   const real = events.filter((e) => e.source === "AI");
   const rows = new Map<string, { views: number; conv: number; persona: string }>();
