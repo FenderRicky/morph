@@ -27,3 +27,6 @@ body {
 
 :root { --bg:#0b0b0f; --fg:#f4f4f5; --muted:#a1a1aa; --accent:#7c5cff; --card:#16161d; }
 body { background: var(--bg); color: var(--fg); }
+
+html { scroll-behavior: smooth; }
+.glow { background: radial-gradient(60% 55% at 15% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%); }
