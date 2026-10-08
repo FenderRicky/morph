@@ -156,7 +156,7 @@ To use your own backend, change `API` in `extension/popup.js` and `host_permissi
 - [x] Event tracking and live dashboard (Supabase)
 - [x] Deployed on Vercel
 - [x] Extension v0.2 with an AI reorder endpoint
-- [ ] Test and tune section detection across many real portfolios
+- [x] Tested on 5 real portfolios (all worked); keep testing edge cases
 - [ ] Send extension usage to the dashboard
 - [ ] Harden rate limiting
 - [ ] Chrome Web Store listing and demo video

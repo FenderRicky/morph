@@ -1,0 +1,16 @@
+@keyframes morphIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+#__morph_pill {
+  background: rgba(22, 22, 29, 0.92) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(124, 92, 255, 0.55) !important;
+  border-radius: 18px !important;
+  padding: 14px 16px !important;
+  max-width: 300px !important;
+  font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
+  animation: morphIn 0.3s ease !important;
+}
+#__morph_pill > div:first-child { color: #fff !important; font-size: 11px !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; }
+#__morph_pill > div:first-child::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #7c5cff; }
+#__morph_pill > div:nth-child(2) { color: #c4c4cc !important; margin-top: 8px !important; }
+#__morph_pill > button { background: #7c5cff !important; color: #fff !important; border-radius: 999px !important; padding: 6px 14px !important; margin-top: 12px !important; font-weight: 600 !important; }

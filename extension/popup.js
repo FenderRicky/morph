@@ -1,12 +1,16 @@
 const API = "https://morph-inky.vercel.app";
 const out = document.getElementById("out");
+const buttons = [...document.querySelectorAll("button[data-p]")];
 
 async function run(persona) {
-  out.textContent = "Working...";
+  buttons.forEach((b) => (b.disabled = true));
+  buttons.forEach((b) => b.classList.toggle("active", b.dataset.p === persona && persona !== "reset"));
+  out.textContent = persona === "reset" ? "Restoring..." : "Reading the page...";
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     const target = { tabId: tab.id };
     await chrome.scripting.executeScript({ target, files: ["morph.js"] });
+    await chrome.scripting.insertCSS({ target, files: ["pill.css"] });
 
     if (persona === "reset") {
       const [{ result }] = await chrome.scripting.executeScript({ target, func: () => window.__morph.reset() });
@@ -20,6 +24,7 @@ async function run(persona) {
       return;
     }
 
+    out.textContent = "Asking the AI...";
     let plan = null;
     try {
       const res = await fetch(API + "/api/reorder", {
@@ -39,7 +44,9 @@ async function run(persona) {
     out.textContent = result;
   } catch (e) {
     out.textContent = "Can't run on this page.";
+  } finally {
+    buttons.forEach((b) => (b.disabled = false));
   }
 }
 
-document.querySelectorAll("button[data-p]").forEach((b) => (b.onclick = () => run(b.dataset.p)));
+buttons.forEach((b) => (b.onclick = () => run(b.dataset.p)));
